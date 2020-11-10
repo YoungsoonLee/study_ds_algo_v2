@@ -78,6 +78,7 @@ func generateK_aryStrings(n int, A []int, i int, k int) {
 	}
 }
 
+// find 8 directions of a matrix
 func findConnects(matrix [][]int, M, N, r, c int) int {
 	answer := 0
 	if r < 0 || c < 0 || r >= M || c >= N {
