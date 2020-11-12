@@ -60,7 +60,7 @@ func (ll *LinkedList) InsertEnd(data interface{}) {
 func (ll *LinkedList) Insert(position int, data interface{}) error {
 	node := &ListNode{data, nil}
 	if position < 1 || position > ll.size+1 {
-		return fmt.Errorf("innsert: index out of bounds")
+		return fmt.Errorf("insert: index out of bounds")
 	}
 
 	var prev, current *ListNode
