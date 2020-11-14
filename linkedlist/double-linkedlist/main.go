@@ -1,4 +1,4 @@
-package main
+package doubleLinkedList
 
 type DLLNode struct {
 	data interface{}
@@ -121,6 +121,25 @@ func (dll *DLL) DeleteLast() int {
 		dll.tail.next = nil
 		dll.size--
 		return head.data.(int)
+	}
+	return -1
+}
+
+func (dll *DLL) Delete(pos int) int {
+	if !(dll.CheckIfEmpty()) {
+		head := dll.head
+		for i := 1; i <= pos; i++ {
+			if head.next == nil && pos > i {
+				// list is lesser than given position
+				return -1
+			} else if i == pos {
+				head.prev.next = head.next
+				head.next.prev = head.prev
+				dll.size--
+				return head.data.(int)
+			}
+			head = head.next
+		}
 	}
 	return -1
 }
