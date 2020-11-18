@@ -333,3 +333,51 @@ func printListInReverse(head *ListNode) {
 	printListInReverse(head.next)
 	fmt.Print(head.data)
 }
+
+func (ll *LinkedList) IsLengthEven() bool {
+	current := ll.head
+	for current != nil && current.next != nil {
+		current = current.next.next
+	}
+	if current != nil {
+		return false
+	}
+	return true
+}
+
+func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
+	if l1 == nil {
+		return l2
+	}
+
+	if l2 == nil {
+		return l1
+	}
+
+	if l1.data.(int) < l2.data.(int) {
+		l1.next = mergeTwoLists(l1.next, l2)
+		return l1
+	}
+	l2.next = mergeTwoLists(l1, l2.next)
+	return l2
+}
+
+func mergeTwoLists2(l1 *ListNode, l2 *ListNode) *ListNode {
+	dummy := new(ListNode)
+	for node := dummy; l1 != nil || l2 != nil; node = node.next {
+		if l1 == nil {
+			node.next = l2
+			break
+		} else if l2 == nil {
+			node.next = l1
+			break
+		} else if l1.data.(int) < l2.data.(int) {
+			node.next = l1
+			l1 = l1.next
+		} else {
+			node.next = l2
+			l2 = l2.next
+		}
+	}
+	return dummy.next
+}
