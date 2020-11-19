@@ -381,3 +381,60 @@ func mergeTwoLists2(l1 *ListNode, l2 *ListNode) *ListNode {
 	}
 	return dummy.next
 }
+
+func mergeKLists(lists []*ListNode) *ListNode {
+	if lists == nil || len(lists) == 0 {
+		return nil
+	}
+
+	for len(lists) > 1 {
+		l1 := lists[0]
+		l2 := lists[1]
+		lists = lists[2:]
+		merged := mergeTwoLists(l1, l2)
+		lists = append(lists, merged)
+	}
+	return lists[0]
+}
+
+func sortList(head *ListNode) *ListNode {
+	if head == nil || head.next == nil {
+		return head
+	}
+
+	slow, fast := head, head
+	for fast.next != nil && fast.next.next != nil {
+		slow, fast = slow.next, fast.next.next
+	}
+
+	firstTail := slow
+	slow = slow.next
+	firstTail.next = nil
+
+	first, second := sortList(head), sortList(slow)
+	return merge(first, second)
+}
+
+func merge(head1 *ListNode, head2 *ListNode) *ListNode {
+	curHead := &ListNode{}
+	tmpHead := curHead
+
+	for head1 != nil && head2 != nil {
+		if head1.data.(int) < head2.data.(int) {
+			curHead.next = head1
+			head1 = head1.next
+			curHead = curHead.next
+		} else {
+			curHead.next = head2
+			head2 = head2.next
+			curHead = curHead.next
+		}
+	}
+
+	if head1 != nil {
+		curHead.next = head1
+	} else if head2 != nil {
+		curHead.next = head2
+	}
+	return tmpHead.next
+}
