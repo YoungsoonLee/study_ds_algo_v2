@@ -1,6 +1,8 @@
 package singlyLinkedList
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type ListNode struct {
 	data interface{}
@@ -437,4 +439,51 @@ func merge(head1 *ListNode, head2 *ListNode) *ListNode {
 		curHead.next = head2
 	}
 	return tmpHead.next
+}
+
+func splitList(head *ListNode) (head1 *ListNode, head2 *ListNode) {
+	var slow, fast *ListNode
+	if head == nil || head.next == nil {
+		head1 = head
+		head2 = nil
+	} else {
+		slow = head
+		fast = head.next
+		for fast != nil {
+			slow = slow.next
+			fast = fast.next.next
+		}
+		head1 = head
+		head2 = slow.next
+		slow.next = nil
+	}
+	return head1, head2
+}
+
+func reverseBlockOfKNodes(head *ListNode, k int) *ListNode {
+	if head == nil || k == 1 {
+		return head
+	}
+
+	length := 0
+	node := head
+	for node != nil {
+		length++
+		node = node.next
+	}
+
+	result := ListNode{0, head}
+	previous := &result
+	for step := 0; step+k <= length; step = step + k {
+		tail := previous.next
+		nextNode := tail.next
+		for i := 1; i < k; i++ {
+			tail.next = nextNode.next
+			nextNode.next = previous.next
+			previous.next = nextNode
+			nextNode = tail.next
+		}
+		previous = tail
+	}
+	return result.next
 }
