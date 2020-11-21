@@ -487,3 +487,88 @@ func reverseBlockOfKNodes(head *ListNode, k int) *ListNode {
 	}
 	return result.next
 }
+
+func (ll *LinkedList) modularNodeFromBegin(k int) *ListNode {
+	if k < 0 {
+		return nil
+	}
+	i := 1
+
+	current, modularNode := ll.head, ll.head
+	for ; current != nil; current = current.next {
+		if i%k == 0 {
+			modularNode = ll.head
+		} else {
+			modularNode = modularNode.next
+		}
+		current = current.next
+		i++
+	}
+	return modularNode
+}
+
+func (ll *LinkedList) modularNodeFromEnd(k int) *ListNode {
+	if k <= 0 {
+		return nil
+	}
+	current, modularNode := ll.head, ll.head
+	i := 0
+	for i := 0; i < k; i++ {
+		if current != nil {
+			current = current.next
+		} else {
+			break
+		}
+	}
+
+	for current != nil {
+		modularNode = modularNode.next
+		current = current.next
+		i++
+	}
+
+	j := k - (i % k)
+	for j > 0 && modularNode != nil {
+		modularNode = modularNode.next
+		j--
+	}
+	return modularNode
+}
+
+func (ll *LinkedList) fractionalNode(k int) *ListNode {
+	if k <= 0 {
+		return nil
+	}
+
+	i := 0
+	current := ll.head
+	var fractionalNode *ListNode
+	for ; current != nil; current = current.next {
+		if i%k == 0 {
+			if fractionalNode == nil {
+				fractionalNode = ll.head
+			} else {
+				fractionalNode = fractionalNode.next
+			}
+		}
+		i++
+	}
+	return fractionalNode
+}
+
+func (ll *LinkedList) sqrtNode() *ListNode {
+	current := ll.head
+	var sqrtN *ListNode
+	for i,j:=1,1; current != nil; current = current.next {
+		if i = j*j {
+			if sqrtN == nil {
+				sqrtN = ll.head
+			}else{
+				sqrtN = sqrtN.next
+			}
+			j++
+		}
+		i++
+	}
+	return sqrtN
+}
