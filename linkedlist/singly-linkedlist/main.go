@@ -559,11 +559,11 @@ func (ll *LinkedList) fractionalNode(k int) *ListNode {
 func (ll *LinkedList) sqrtNode() *ListNode {
 	current := ll.head
 	var sqrtN *ListNode
-	for i,j:=1,1; current != nil; current = current.next {
-		if i = j*j {
+	for i, j := 1, 1; current != nil; current = current.next {
+		if i == j*j {
 			if sqrtN == nil {
 				sqrtN = ll.head
-			}else{
+			} else {
 				sqrtN = sqrtN.next
 			}
 			j++
@@ -571,4 +571,256 @@ func (ll *LinkedList) sqrtNode() *ListNode {
 		i++
 	}
 	return sqrtN
+}
+
+func mergeTwoListsWithOrder(head1 *ListNode, head2 *ListNode) *ListNode {
+	h := ListNode{}
+	l := &h
+
+	for head1 != nil && head2 != nil {
+		if head1.data.(int) <= head2.data(int) {
+			l.next = head1
+			head1 = head1.next
+		} else {
+			l.next = head2
+			head2 = head2.next
+		}
+		l = l.next
+	}
+
+	if head1 == nil {
+		l.next = head2
+	}
+	if head2 == nil {
+		l.next = head1
+	}
+	return h.next
+}
+
+func mergeTwoListsWithOrder2(head1 *ListNode, head2 *ListNode) *ListNode {
+	if head1 == nil {
+		return head2
+	}
+	if head2 == nil {
+		return head1
+	}
+
+	if head1.data.(int) < head2.data.(int) {
+		head1.next = mergeTwoListsWithOrder2(head1.next, head2)
+		return head1
+	}
+	head2.next = mergeTwoListsWithOrder2(head1, head2.next)
+	return head2
+}
+
+func segregateEvenOdds(head *ListNode) *ListNode {
+	var evensHead, evenEnd, oddsHead, oddEnd *ListNode
+	evensHead, evenEnd, oddsHead, oddEnd = nil, nil, nil, nil
+
+	currNode := head
+	for currNode != nil {
+		val := currNode.data.(int)
+		if val%2 == 0 {
+			if evensHead == nil {
+				evensHead = currNode
+				evenEnd = evensHead
+			} else {
+				evenEnd.next = currNode
+				evenEnd = evenEnd.next
+			}
+		} else {
+			if oddsHead == nil {
+				oddsHead = currNode
+				oddEnd = oddsHead
+			} else {
+				oddEnd.next = currNode
+				oddEnd = oddEnd.next
+			}
+		}
+		currNode = currNode.next
+	}
+
+	if oddsHead == nil || evensHead == nil {
+		return head
+	}
+
+	evenEnd.next = oddsHead
+	oddEnd.next = nil
+	return evensHead
+}
+
+func reorderList(head *ListNode) {
+	if head == nil || head.next == nil {
+		return
+	}
+
+	slow, fast := head, head
+	for fast != nil && fast.next != nil {
+		slow, fast = slow.next, fast.next.next
+	}
+
+	var prev *ListNode
+	for slow != nil {
+		slow.next = prev
+		prev = slow
+		slow = slow.next
+	}
+
+	first := head
+	for prev.next != nil {
+		first.next, first = prev, first.next
+		prev.next, prev = first, prev.next
+	}
+}
+
+func oddEvenList(head *ListNode) *ListNode {
+	if head == nil {
+		return nil
+	} else if head.next == nil {
+		return head
+	}
+
+	oddsHead := head
+	evenHead := head.next
+	for current, temp := head, head.next; temp != nil; current, temp = temp, temp.next {
+		current.next = temp.next
+	}
+
+	oddsTail := oddsHead
+	for ; oddsTail.next != nil; oddsTail = oddsTail.next {
+	}
+
+	oddsTail.next = evenHead
+	return oddsHead
+}
+
+func reversePairs(head *ListNode) *ListNode {
+	if head == nil || head.next == nil {
+		return head
+	}
+
+	result := head.next
+	head.next = swapPairs(head.next.next)
+	result.next = head
+	return result
+}
+
+func reversePairs2(head *ListNode) *ListNode {
+	if head == nil || head.next == nil {
+		return head
+	}
+
+	result := head.next
+	var previousNode *ListNode
+	for head != nil && head.next != nil {
+		nextNode := head.next
+		head.next = nextNode.next
+		nextNode.next = head
+		if previousNode != nil {
+			previousNode.next = nextNode
+		}
+		previousNode = head
+		head = head.next
+	}
+	return result
+}
+
+func partition(head *ListNode, X int) *ListNode {
+	lesser, greater := &ListNode{}, &ListNode{}
+	lesserHead, greaterHead := lesser, greater
+	for head != nil {
+		if head.data.(int) < X {
+			lesser.next = head
+			lesser = lesser.next
+		} else {
+			greater.next = head
+			greater = greater.next
+		}
+		head = head.next
+	}
+	lesser.next, greater.next = nil, nil
+	if greaterHead.next != nil {
+		lesser.next = greaterHead.next
+	}
+	return lesserHead.next
+}
+
+func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
+	carry, result := 0, new(ListNode)
+	for node := result; l1 != nil || l2 != nil || carry > 0; node = node.next {
+		if l1 != nil {
+			carry += l1.data.(int)
+			l1 = l1.next
+		}
+		if l2 != nil {
+			carry += l2.data.(int)
+			l2 = l2.next
+		}
+		node.next = &ListNode{carry % 10, nil}
+		carry /= 10
+	}
+	return result.next
+}
+
+func insertionSortList(head *ListNode) *ListNode {
+	if head == nil || head.next == nil {
+		return head
+	}
+	result := &ListNode{next: head}
+	current := head.next
+	head.next = nil
+
+	for current != nil {
+		pre := result
+		target := result.next
+		for target != nil && current.data.(int) > target.data.(int) {
+			target = target.next
+			pre = pre.next
+		}
+		temp := current
+		current = current.next
+		temp.next = target
+		pre.next = temp
+	}
+	return result.next
+}
+
+func intersection(list1, list2 *ListNode) *ListNode {
+	list := LinkedList{}
+	for list1 != nil && list2 != nil {
+		if list1.data.(int) == list2.data.(int) {
+			list.InsertBeginning(list1.data)
+			list1 = list1.next
+			list2 = list2.next
+		} else if list1.data.(int) > list2.data.(int) {
+			list2 = list2.next
+		} else {
+			list1 = list1.next
+		}
+	}
+	return list.head
+}
+
+func intersection2(list1, list2 *ListNode) *ListNode {
+	headList := LinkedList{}
+	tailList := LinkedList{}
+	head, tail := headList.head, tailList.head
+	for list1 != nil && list2 != nil {
+		if list1.data == list2.data {
+			if head == nil {
+				headList.InsertBeginning(list1.data)
+				tailList = headList
+			} else {
+				tailList.InsertBeginning(list1.data)
+				tail = tail.next
+			}
+			list1 = list1.next
+			list2 = list2.next
+		} else if list1.data.(int) > list2.data.(int) {
+			list2 = list2.next
+		} else {
+			list1 = list1.next
+		}
+	}
+	return headList.head
 }
