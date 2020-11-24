@@ -824,3 +824,74 @@ func intersection2(list1, list2 *ListNode) *ListNode {
 	}
 	return headList.head
 }
+
+func intersection3(list1, list2 *ListNode) *ListNode {
+	dummy := &ListNode{}
+	list := LinkedList{}
+	list.head = dummy
+	for list1 != nil && list2 != nil {
+		if list1.data == list2.data {
+			list.InsertBeginning(list1.data)
+			list1 = list1.next
+			list2 = list2.next
+		} else if list1.data.(int) > list2.data.(int) {
+			list2 = list2.next
+		} else {
+			list1 = list1.next
+		}
+	}
+	return list.head
+}
+
+func removeDuplicates(head *ListNode) *ListNode {
+	current := head
+	for current != nil {
+		if current.next != nil && current.data == current.next.data {
+			current.next = current.next.next
+			continue
+		}
+		current = current.next
+	}
+	return head
+}
+
+func alternatingSplit(head *ListNode) (head1, head2 *ListNode) {
+	var a *ListNode = nil
+	var b *ListNode = nil
+	current := head
+	for current != nil {
+		newNode := current
+		current = newNode.next
+		newNode.next = a
+		a = newNode
+		if current != nil {
+			newNode := current
+			current = newNode.next
+			newNode.next = b
+			b = newNode
+		}
+	}
+	head1, head2 = a, b
+	return head1, head2
+}
+
+func removeZeroSumSublists(head *ListNode) *ListNode {
+	type SumNode struct {
+		Node *ListNode
+		Sum  int
+	}
+	acc, sum, dummy := 0, make(map[int]SumNode), &ListNode{next: head}
+	for curr := head; curr != nil; curr = curr.next {
+		acc += curr.data.(int)
+		if p, ok := sum[acc]; ok {
+			for node, subSum := p.Node.next, p.Sum; node != curr; node = node.next {
+				subSum += node.data.(int)
+				delete(sum, subSum)
+			}
+			p.Node.next = curr.next
+		} else {
+			sum[acc] = SumNode{curr, acc}
+		}
+	}
+	return dummy.next
+}
