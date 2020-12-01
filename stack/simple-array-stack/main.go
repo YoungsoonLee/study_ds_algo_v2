@@ -168,6 +168,120 @@ func (s *Stack) insertAtBottom(data interface{}) {
 	s.Push(temp)
 }
 
+func findMin(A []int, i, j int) int {
+	min := A[i]
+	for i <= j {
+		if min > A[i] {
+			min = A[i]
+		}
+		i++
+	}
+	return min
+}
+
+func largestRectangleArea(heights []int) int {
+	maxArea := 0
+	for i := 0; i < len(heights); i++ {
+		for j, minimum_height := i, heights[i]; j < len(heights); j++ {
+			minimum_height = findMin(heights, i, j)
+			maxArea = findMax(maxArea, (j-i+1)*minimum_height)
+		}
+	}
+	return maxArea
+}
+
+func findMax(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+func largestRectangleAreaStack(heights []int) int {
+	i, max := 0, 0
+	stack := make([]int, 0)
+
+	for i < len(heights) {
+		if len(stack) == 0 || heights[i] > heights[stack[len(stack)-1]] {
+			stack = append(stack, i)
+			i++
+		} else {
+			pop := stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+			h := heights[pop]
+			var w int
+			if len(stack) == 0 {
+				w = i
+			} else {
+				w = i - stack[len(stack)-1] - 1
+			}
+			max = findMax(max, h*w)
+		}
+	}
+
+	for len(stack) != 0 {
+		pop := stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		h := heights[pop]
+		var w int
+		if len(stack) == 0 {
+			w = i
+		} else {
+			w = i - stack[len(stack)-1] - 1
+		}
+		max = findMax(max, h*w)
+	}
+
+	return max
+}
+
+func abs(x int) int {
+	if x < 0 {
+		return -x
+	}
+	return x
+}
+
+func pairWiseConsecutive(s *Stack) bool {
+	auxStack := NewStack(s.Size())
+	for !s.IsEmpty() {
+		auxStack.Push(s.Peek())
+		s.Pop()
+	}
+
+	result := true
+	for auxStack.Size() > 1 {
+		x, _ := auxStack.Peek()
+		auxStack.Pop()
+		y, _ := auxStack.Peek()
+		auxStack.Pop()
+		if abs(x-y) != 1 {
+			result = false
+		}
+
+		s.Push(x)
+		s.Push(y)
+	}
+
+	if auxStack.Size() == 1 {
+		s.Push(auxStack.Peek())
+	}
+	return result
+
+}
+
+func removeDuplicates(S string) string {
+	stack := make([]byte, 0, len(S))
+	for i := range S {
+		if len(stack) > 0 && stack[len(stack)-1] == S[i] {
+			stack = stack[:len(stack)-1]
+		} else {
+			stack = append(stack, S[i])
+		}
+	}
+	return string(stack)
+}
+
 func main() {
 	s := NewStack(3)
 	s.Push(10)
