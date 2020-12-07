@@ -242,6 +242,7 @@ func abs(x int) int {
 	return x
 }
 
+/*
 func pairWiseConsecutive(s *Stack) bool {
 	auxStack := NewStack(s.Size())
 	for !s.IsEmpty() {
@@ -269,6 +270,7 @@ func pairWiseConsecutive(s *Stack) bool {
 	return result
 
 }
+*/
 
 func removeDuplicates(S string) string {
 	stack := make([]byte, 0, len(S))
@@ -283,12 +285,15 @@ func removeDuplicates(S string) string {
 }
 
 func main() {
-	s := NewStack(3)
-	s.Push(10)
-	s.Push(20)
-	s.Push(30)
-	fmt.Println(s.Size())
-	fmt.Println(s.Peek())
-	s.reverseStack()
-	fmt.Println(s.Peek())
+	fmt.Println(int(14 / 10))
+	/*
+		s := NewStack(3)
+		s.Push(10)
+		s.Push(20)
+		s.Push(30)
+		fmt.Println(s.Size())
+		fmt.Println(s.Peek())
+		s.reverseStack()
+		fmt.Println(s.Peek())
+	*/
 }
