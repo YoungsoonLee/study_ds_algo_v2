@@ -175,6 +175,157 @@ func findMax(root *BinaryTreeNode) int {
 	return max
 }
 
+func findMax2(root *BinaryTreeNode) int {
+	max := math.MinInt32
+	if root == nil {
+		return max
+	}
+
+	queue := []*BinaryTreeNode{root}
+	for len(queue) > 0 {
+		qlen := len(queue)
+		for i := 0; i < qlen; i++ {
+			node := queue[0]
+			if node.data > max {
+				max = node.data
+			}
+			queue = queue[1:]
+			if node.left != nil {
+				queue = append(queue, node.left)
+			}
+			if node.right != nil {
+				queue = append(queue, node.right)
+			}
+		}
+	}
+	return max
+}
+
+func find(root *BinaryTreeNode, data int) *BinaryTreeNode {
+	if root == nil {
+		return root
+	} else {
+		if data == root.data {
+			return root
+		} else {
+			temp := find(root.left, data)
+			if temp != nil {
+				return temp
+			} else {
+				return find(root.right, data)
+			}
+		}
+	}
+}
+
+// !!!
+func Insert(root *BinaryTreeNode, v int) *BinaryTreeNode {
+	newNode := &BinaryTreeNode{nil, v, nil}
+	if root == nil {
+		return newNode
+	}
+	if root.left == nil {
+		root.left = Insert(root.left, v)
+	} else if root.right == nil {
+		root.right = Insert(root.right, v)
+	}
+	return root
+}
+
+func Insert2(root *BinaryTreeNode, v int) *BinaryTreeNode {
+	newNode := &BinaryTreeNode{nil, v, nil}
+	if root == nil {
+		return newNode
+	}
+
+	queue := []*BinaryTreeNode{root}
+	for len(queue) > 0 {
+		qlen := len(queue)
+		for i := 0; i < qlen; i++ {
+			node := queue[0]
+			queue = queue[1:]
+			if node.left != nil {
+				queue = append(queue, node.left)
+			} else {
+				node.left = newNode
+				return root
+			}
+			if node.right != nil {
+				queue = append(queue, node.right)
+			} else {
+				node.right = newNode
+				return root
+			}
+		}
+	}
+	return root
+}
+
+func Size(root *BinaryTreeNode) int {
+	if root == nil {
+		return 0
+	}
+	return 1 + Size(root.left) + Size(root.right)
+}
+
+func Size2(root *BinaryTreeNode) int {
+	if root == nil {
+		return 0
+	}
+
+	var result int
+	queue := []*BinaryTreeNode{root}
+
+	for len(queue) > 0 {
+		qlen := len(queue)
+		for i := 0; i < qlen; i++ {
+			node := queue[0]
+			result++
+			queue = queue[1:]
+			if node.left != nil {
+				queue = append(queue, node.left)
+			}
+			if node.right != nil {
+				queue = append(queue, node.right)
+			}
+		}
+	}
+
+	return result
+}
+
+func LevelOrderBottomUp(root *BinaryTreeNode) [][]int {
+	if root == nil {
+		return [][]int{}
+	}
+
+	var result [][]int
+	queue := []*BinaryTreeNode{root}
+	stack := NewStack(1)
+
+	for len(queue) > 0 {
+		qlen := len(queue)
+		var level []int
+		for i := 0; i < qlen; i++ {
+			node := queue[0]
+			level = append(level, node.data)
+			queue = queue[1:]
+			if node.left != nil {
+				queue = append(queue, node.left)
+			}
+			if node.right != nil {
+				queue = append(queue, node.left)
+			}
+		}
+		stack.Push(level)
+	}
+
+	for !stack.IsEmpty() {
+		result = append(result, stack.Pop().([]int)) // !!!!
+	}
+	return result
+}
+
 func main() {
 	t1 := NewBinaryTree(10, 1)
 
@@ -206,4 +357,9 @@ func main() {
 
 	fmt.Println()
 	fmt.Println(LevelOrder(t1))
+
+	fmt.Println(findMax2(t1))
+
+	fmt.Println(Size(t1))
+	fmt.Println(Size2(t1))
 }
