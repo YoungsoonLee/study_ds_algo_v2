@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"math/rand"
 )
 
@@ -152,6 +153,26 @@ func LevelOrder(root *BinaryTreeNode) [][]int {
 		result = append(result, level)
 	}
 	return result
+}
+
+func findMax(root *BinaryTreeNode) int {
+	max := math.MinInt32
+	if root != nil {
+		root_val := root.data
+		left := findMax(root.left)
+		right := findMax(root.right)
+
+		if left > right {
+			max = left
+		} else {
+			max = right
+		}
+
+		if root_val > max {
+			max = root_val
+		}
+	}
+	return max
 }
 
 func main() {
