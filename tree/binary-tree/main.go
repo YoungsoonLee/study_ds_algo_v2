@@ -326,6 +326,164 @@ func LevelOrderBottomUp(root *BinaryTreeNode) [][]int {
 	return result
 }
 
+func DeleteTree(root *BinaryTreeNode) *BinaryTreeNode {
+	if root == nil {
+		return nil
+	}
+	// first delete both subtrees
+	root.left = DeleteTree(root.left)
+	root.right = DeleteTree(root.right)
+	// Delete current node only affter deleting subtree
+	root = nil
+	return root
+}
+
+func Height(root *BinaryTreeNode) int {
+	if root == nil {
+		return 0
+	} else {
+		leftHeight := Height(root.left)
+		rightHeight := Height(root.right)
+
+		if leftHeight > rightHeight {
+			return leftHeight + 1
+		} else {
+			return rightHeight + 1
+		}
+	}
+}
+
+func Height2(root *BinaryTreeNode) int {
+	if root == nil {
+		return 0
+	}
+
+	queue := []*BinaryTreeNode{root}
+	count := 0
+	for len(queue) > 0 {
+		qlen := len(queue)
+		var level []int
+		for i := 0; i < qlen; i++ {
+			node := queue[0]
+			queue = queue[1:]
+			level = append(level, node.data)
+			if node.left != nil {
+				queue = append(queue, node.left)
+			}
+
+			if node.right != nil {
+				queue = append(queue, node.right)
+			}
+		}
+		count++
+	}
+	return count
+}
+
+func LeavesCount(root *BinaryTreeNode) int {
+	if root == nil {
+		return 0
+	}
+
+	count := 0
+	queue := []*BinaryTreeNode{root}
+
+	for len(queue) > 0 {
+		qlen := len(queue)
+		for i := 0; i < qlen; i++ {
+			node := queue[0]
+			queue = queue[1:]
+
+			if node.left != nil {
+				queue = append(queue, node.left)
+			}
+
+			if node.right != nil {
+				queue = append(queue, node.right)
+			}
+
+			if node.left == nil && node.right == nil {
+				count++
+			}
+		}
+	}
+
+	return count
+}
+
+func FullNodesCount(root *BinaryTreeNode) int {
+	if root == nil {
+		return 0
+	}
+
+	count := 0
+	queue := []*BinaryTreeNode{root}
+
+	for len(queue) > 0 {
+		qlen := len(queue)
+		for i := 0; i < qlen; i++ {
+			node := queue[0]
+			queue = queue[1:]
+
+			if node.left != nil && node.right != nil {
+				count++
+			}
+
+			if node.left != nil {
+				queue = append(queue, node.left)
+			}
+
+			if node.right != nil {
+				queue = append(queue, node.right)
+			}
+
+		}
+	}
+	return count
+}
+
+func HalfNodesCount(root *BinaryTreeNode) int {
+	if root == nil {
+		return 0
+	}
+
+	count := 0
+	queue := []*BinaryTreeNode{root}
+
+	for len(queue) > 0 {
+		qlen := len(queue)
+		for i := 0; i < qlen; i++ {
+			node := queue[0]
+			queue = queue[1:]
+
+			if (node.left != nil && node.right == nil) || (node.right != nil && node.left == nil) {
+				count++
+			}
+
+			if node.left != nil {
+				queue = append(queue, node.left)
+			}
+
+			if node.right != nil {
+				queue = append(queue, node.right)
+			}
+		}
+	}
+	return count
+}
+
+func CompareStructures(root1, root2 *BinaryTreeNode) bool {
+	if root1 == nil && root2 == nil {
+		return true
+	}
+
+	if root1 == nil || root2 == nil {
+		return false
+	}
+
+	return CompareStructures(root1.left, root2.left) && CompareStructures(root1.right, root2.right)
+}
+
 func main() {
 	t1 := NewBinaryTree(10, 1)
 
