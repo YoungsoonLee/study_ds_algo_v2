@@ -816,8 +816,90 @@ func preorder(node *BinaryTreeNode, x, y int, data *[][]int) {
 	preorder(node.right, x+1, y+1, data)
 }
 
+/*
 func ConnectSiblings(root *BinaryTreeNode) *BinaryTreeNode {
+	if root == nil {
+		return nil
+	}
 
+	queue := []*BinaryTreeNode{root}
+	for len(queue) > 0 {
+		node := queue[0]
+		queue := queue[1:]
+		if node.left != nil && node.right != nil {
+			node.left.ne
+		}
+	}
+}
+*/
+
+func MinDepth(root *BinaryTreeNode) int {
+	if root == nil {
+		return 0
+	}
+
+	if root.left == nil && root.right == nil {
+		return 1
+	}
+
+	if root.left == nil {
+		return MinDepth(root.right) + 1
+	}
+
+	if root.right == nil {
+		return MinDepth(root.left) + 1
+	}
+
+	return min(MinDepth(root.left), MinDepth(root.right)) + 1
+}
+
+func MinDepth2(root *BinaryTreeNode) int {
+	if root == nil {
+		return 0
+	}
+
+	left, right := MinDepth2(root.left), MinDepth2(root.right)
+	if left == 0 || right == 0 {
+		return left + right + 1
+	}
+	return min(left, right) + 1
+}
+
+func MinDepth3(root *BinaryTreeNode) int {
+	if root == nil {
+		return 0
+	}
+
+	count := 0
+	queue := []*BinaryTreeNode{root}
+
+	for len(queue) > 0 {
+		qlen := len(queue)
+		var level []int
+		for i := 0; i < qlen; i++ {
+			node := queue[0]
+			level = append(level, node.data)
+			queue = queue[1:]
+			if node.left == nil && node.right == nil {
+				return count + 1
+			}
+			if node.left != nil {
+				queue = append(queue, node.left)
+			}
+			if node.right != nil {
+				queue = append(queue, node.right)
+			}
+		}
+		count++
+	}
+	return count
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
 }
 
 func main() {
