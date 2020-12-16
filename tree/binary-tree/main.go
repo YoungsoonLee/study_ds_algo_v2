@@ -902,6 +902,28 @@ func min(a, b int) int {
 	return b
 }
 
+func printAncestors(root *BinaryTreeNode, node int) bool {
+	if root == nil {
+		return false
+	}
+
+	if root.data == node {
+		return true
+	}
+
+	left := printAncestors(root.left, node)
+	right := false
+	if !left {
+		right = printAncestors(root.right, node)
+	}
+
+	if left || right {
+		fmt.Printf("%d ", root.data)
+	}
+
+	return left || right
+}
+
 func main() {
 	t1 := NewBinaryTree(10, 1)
 
