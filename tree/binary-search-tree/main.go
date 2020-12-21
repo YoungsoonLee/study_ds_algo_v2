@@ -102,3 +102,73 @@ func deleteMin(root *BSTNode) *BSTNode {
 	root.left = deleteMin(root.left)
 	return root
 }
+
+// inorder
+func Walk(root *BSTNode, ch chan int) {
+	if root == nil {
+		return
+	}
+
+	Walk(root.left, ch)
+	ch <- root.data
+	Walk(root.right, ch)
+}
+
+func Walker(root *BSTNode) <-chan int {
+	ch := make(chan int)
+	go func() {
+		Walk(root, ch)
+		close(ch)
+	}()
+	return ch
+}
+
+func Compare(t1, t2 *BSTNode) bool {
+	c1, c2 := Walker(t1), Walker(t2)
+	for {
+		v1, ok1 := <-c1
+		v2, ok2 := <-c2
+		if !ok1 || !ok2 {
+			return ok1 == ok2
+		}
+		if v1 != v2 {
+			break
+		}
+	}
+	return false
+}
+
+func LCA(root *BSTNode, a, b int) *BSTNode {
+	cur := root
+	for {
+		switch {
+		case a < cur.data && b < cur.data:
+			cur = cur.left
+		case a > cur.data && b > cur.data:
+			cur = cur.right
+		default:
+			return cur
+		}
+	}
+
+	return root
+}
+
+func IsBST(root *BSTNode) bool {
+	if root == nil {
+		return true
+	}
+
+	if root.left != nil && root.left.data > root.right.data {
+		return false
+	}
+
+	if root.right != nil && root.right.data < root.left.data {
+		return false
+	}
+
+	if !IsBST(root.left) || !IsBST(root.right) {
+		return false
+	}
+	return true
+}
