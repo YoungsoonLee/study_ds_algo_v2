@@ -333,3 +333,18 @@ func RangePrinter2(root *BSTNode, K1, K2 int) {
 		result = append(result, level)
 	}
 }
+
+//
+func CountTrees(n int) int {
+	if n <= 1 {
+		return 1
+	} else {
+		sum := 0
+		for root := 1; root <= n; root++ {
+			left := CountTrees(root - 1)
+			right := CountTrees(n - root)
+			sum += left * right
+		}
+		return sum
+	}
+}
