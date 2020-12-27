@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"math"
+	"math/rand"
+	"time"
 )
 
 type Item interface {
@@ -127,4 +129,112 @@ func Heapify(items []Item) *Heap {
 		i--
 	}
 	return h
+}
+
+type Int int
+
+func (a Int) Less(b Item) bool {
+	val, ok := b.(Int)
+	return ok && a <= val
+}
+
+func verifyHeap(h *Heap) bool {
+	queue := make([]Int, 1)
+	queue[0] = 0
+	for len(queue) > 0 {
+		p := queue[0]
+		queue = queue[1:]
+		l := leftChild(int(p))
+		r := rightChile(int(p))
+		if l < h.size {
+			if !h.data[p].Less(h.data[l]) {
+				return false
+			}
+			queue = append(queue, Int(l))
+		}
+		if r < h.size {
+			if !h.data[p].Less(h.data[r]) {
+				return false
+			}
+			queue = append(queue, Int(r))
+		}
+	}
+	return true
+}
+
+func verifyStrictlyIncreasing(h *Heap) (bool, []Item) {
+	prev, _ := h.Extract()
+	order := []Item{prev}
+	for h.size > 0 {
+		curr, _ := h.Extract()
+		order = append(order, curr)
+		if curr.Less(prev) {
+			return false, order
+		}
+		prev = curr
+		order = append(order, prev)
+	}
+	return true, order
+}
+
+func randomPerm(n int) []Item {
+	src := rand.NewSource(time.Now().UnixNano())
+	r := rand.New(src)
+	ints := r.Perm(n)
+	items := make([]Item, n)
+	for idx, item := range ints {
+		items[idx] = Int(item)
+	}
+	return items
+}
+
+func HeapSort(data []Item) []Item {
+	hp := Heapify(data)
+	size := len(hp.data)
+	for i := size - 1; i > 0; i-- {
+		swap(hp, 0, i)
+		hp.size--
+		hp.percolateDown(0)
+	}
+	hp.size = size
+	return hp.data
+}
+
+func findMaxInMinHeap(h *Heap) Int {
+	max := Int(-1)
+	for i := (h.size + 1) / 2; i < h.size; i++ {
+		if h.data[i].(Int) > max {
+			max = h.data[i].(Int)
+		}
+	}
+	return max
+}
+
+func delete(h *Heap, i int) int {
+	if i > h.size {
+		fmt.Println("Wrong position")
+		return -1
+	}
+
+	key := h.data[i].(Int)
+	h.data[i] = h.data[h.size-1]
+	h.size--
+	h.percolateDown(i)
+	return key
+}
+
+func main() {
+	items := randomPerm(20)
+	hp := New()
+	for _, item := range items {
+		fmt.Println("Inserting an element into Heap: ", hp.data)
+		hp.Insert(item)
+	}
+	if !verifyHeap(hp) {
+		fmt.Println("invalid Heap: ", hp.data)
+		return
+	}
+	if ok, order := verifyStrictlyIncreasing(hp); !ok {
+		fmt.Println("invalid Heap extraction order: ", order)
+	}
 }
