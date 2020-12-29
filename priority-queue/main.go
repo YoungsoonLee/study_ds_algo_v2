@@ -210,7 +210,7 @@ func findMaxInMinHeap(h *Heap) Int {
 	return max
 }
 
-func delete(h *Heap, i int) int {
+func delete(h *Heap, i int) Int {
 	if i > h.size {
 		fmt.Println("Wrong position")
 		return -1
@@ -221,6 +221,16 @@ func delete(h *Heap, i int) int {
 	h.size--
 	h.percolateDown(i)
 	return key
+}
+
+func kThSmallestElement(h *Heap, k int) (Item, error) {
+	if k >= h.size {
+		return nil, fmt.Errorf("Wrong position")
+	}
+	for i := 1; i < k; i++ {
+		h.Extract()
+	}
+	return h.Extract()
 }
 
 func main() {
