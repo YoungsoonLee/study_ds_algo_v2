@@ -573,6 +573,7 @@ func (ll *LinkedList) sqrtNode() *ListNode {
 	return sqrtN
 }
 
+/*
 func mergeTwoListsWithOrder(head1 *ListNode, head2 *ListNode) *ListNode {
 	h := ListNode{}
 	l := &h
@@ -596,6 +597,7 @@ func mergeTwoListsWithOrder(head1 *ListNode, head2 *ListNode) *ListNode {
 	}
 	return h.next
 }
+*/
 
 func mergeTwoListsWithOrder2(head1 *ListNode, head2 *ListNode) *ListNode {
 	if head1 == nil {
@@ -694,6 +696,7 @@ func oddEvenList(head *ListNode) *ListNode {
 	return oddsHead
 }
 
+/*
 func reversePairs(head *ListNode) *ListNode {
 	if head == nil || head.next == nil {
 		return head
@@ -704,6 +707,7 @@ func reversePairs(head *ListNode) *ListNode {
 	result.next = head
 	return result
 }
+*/
 
 func reversePairs2(head *ListNode) *ListNode {
 	if head == nil || head.next == nil {
