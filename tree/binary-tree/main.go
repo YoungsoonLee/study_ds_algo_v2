@@ -924,42 +924,61 @@ func printAncestors(root *BinaryTreeNode, node int) bool {
 	return left || right
 }
 
+func Reverse(s string) string {
+	runes := []rune(s)
+	for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
+		runes[i], runes[j] = runes[j], runes[i]
+	}
+	return string(runes)
+}
+
 func main() {
-	t1 := NewBinaryTree(10, 1)
 
-	PreOrder(t1)
-	fmt.Println()
-
-	c := PreOrderWalker(t1)
-	for {
-		v, ok := <-c
-		if !ok {
-			break
-		}
-		fmt.Printf("%d", v)
+	s := "abcdefg"
+	f := 0
+	l := len(s) - 1
+	for f < l {
+		s[f], s[l] = s[l], s[f]
 	}
 
-	fmt.Println()
+	fmt.Println(s)
+	/*
+		t1 := NewBinaryTree(10, 1)
 
-	InOrder(t1)
-	fmt.Println()
+		PreOrder(t1)
+		fmt.Println()
 
-	c = InOrderWalker(t1)
-	for {
-		v, ok := <-c
-		if !ok {
-			break
+		c := PreOrderWalker(t1)
+		for {
+			v, ok := <-c
+			if !ok {
+				break
+			}
+			fmt.Printf("%d", v)
 		}
-		fmt.Printf("%d", v)
-	}
 
-	fmt.Println()
-	fmt.Println(LevelOrder(t1))
+		fmt.Println()
 
-	fmt.Println(findMax2(t1))
+		InOrder(t1)
+		fmt.Println()
 
-	fmt.Println(Size(t1))
-	fmt.Println(Size2(t1))
+		c = InOrderWalker(t1)
+		for {
+			v, ok := <-c
+			if !ok {
+				break
+			}
+			fmt.Printf("%d", v)
+		}
 
-	fmt.Println(BinaryTreePaths(t1))
+		fmt.Println()
+		fmt.Println(LevelOrder(t1))
+
+		fmt.Println(findMax2(t1))
+
+		fmt.Println(Size(t1))
+		fmt.Println(Size2(t1))
+
+		fmt.Println(BinaryTreePaths(t1))
+	*/
 }

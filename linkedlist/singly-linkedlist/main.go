@@ -72,13 +72,13 @@ func (ll *LinkedList) Insert(position int, data interface{}) error {
 	for position > 1 {
 		prev = current
 		current = current.next
-		position--
+		position-- // !!!
 	}
 
 	if prev != nil {
 		prev.next = node
 		node.next = current
-	} else {
+	} else { //first
 		node.next = current
 		ll.head = node
 	}
