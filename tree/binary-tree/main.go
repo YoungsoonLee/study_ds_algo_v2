@@ -942,43 +942,42 @@ func main() {
 	}
 
 	fmt.Println(s)
-	/*
-		t1 := NewBinaryTree(10, 1)
 
-		PreOrder(t1)
-		fmt.Println()
+	t1 := NewBinaryTree(10, 1)
 
-		c := PreOrderWalker(t1)
-		for {
-			v, ok := <-c
-			if !ok {
-				break
-			}
-			fmt.Printf("%d", v)
+	PreOrder(t1)
+	fmt.Println()
+
+	c := PreOrderWalker(t1)
+	for {
+		v, ok := <-c
+		if !ok {
+			break
 		}
+		fmt.Printf("%d", v)
+	}
 
-		fmt.Println()
+	fmt.Println()
 
-		InOrder(t1)
-		fmt.Println()
+	InOrder(t1)
+	fmt.Println()
 
-		c = InOrderWalker(t1)
-		for {
-			v, ok := <-c
-			if !ok {
-				break
-			}
-			fmt.Printf("%d", v)
+	c = InOrderWalker(t1)
+	for {
+		v, ok := <-c
+		if !ok {
+			break
 		}
+		fmt.Printf("%d", v)
+	}
 
-		fmt.Println()
-		fmt.Println(LevelOrder(t1))
+	fmt.Println()
+	fmt.Println(LevelOrder(t1))
 
-		fmt.Println(findMax2(t1))
+	fmt.Println(findMax2(t1))
 
-		fmt.Println(Size(t1))
-		fmt.Println(Size2(t1))
+	fmt.Println(Size(t1))
+	fmt.Println(Size2(t1))
 
-		fmt.Println(BinaryTreePaths(t1))
-	*/
+	fmt.Println(BinaryTreePaths(t1))
 }
